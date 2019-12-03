@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.26;
 
    /**
     * @title SafeMath
@@ -186,7 +186,6 @@ contract BasicToken is ERC20Interface, Owned {
     
   function transfer(address _to, uint256 _value) public returns (bool) {
     require(_to != address(0));
-    require(_value <= balances[msg.sender]);
 
     // SafeMath.sub will throw if there is not enough balance.
     balances[msg.sender] = balances[msg.sender].sub(_value);
@@ -200,7 +199,7 @@ contract BasicToken is ERC20Interface, Owned {
     return true;
   }
 
-  function totalSupply() public constant returns (uint256) {
+  function totalSupply() public view returns (uint256) {
     return tokensIssuedTotal;
   }
   
@@ -211,7 +210,7 @@ contract BasicToken is ERC20Interface, Owned {
     */
   
   
-  function balanceOf(address _owner) public constant returns (uint256 balance) {
+  function balanceOf(address _owner) public view returns (uint256 balance) {
     return balances[_owner];
   }
  }
@@ -242,8 +241,6 @@ contract StandardToken is BasicToken {
    
   function transferFrom(address _from, address _to, uint256 _value) public returns (bool) {
     require(_to != address(0));
-    require(_value <= balances[_from]);
-    require(_value <= allowed[_from][msg.sender]);
 
     balances[_from] = balances[_from].sub(_value);
     uint256 netbakiye = _value.sub(fee);
@@ -281,7 +278,7 @@ contract StandardToken is BasicToken {
     * @return A uint256 specifying the amount of tokens still available for the spender.
     */
 
-  function allowance(address _owner, address _spender) public constant returns (uint256 remaining) {
+  function allowance(address _owner, address _spender) public view returns (uint256 remaining) {
     return allowed[_owner][_spender];
   }
 
@@ -290,11 +287,11 @@ contract StandardToken is BasicToken {
 
 contract BanList is Owned, StandardToken {
 
-    function getBanStatus(address _unclear) external constant returns (bool) {
+    function getBanStatus(address _unclear) external view returns (bool) {
         return checkBan[_unclear];
     }
 
-    function getOwner() external constant returns (address) {
+    function getOwner() external view returns (address) {
         return owner;
     }
 
@@ -388,7 +385,6 @@ contract BurnableToken is MintableToken {
      
     function burn(uint256 _value) onlyOwner public returns (bool) {
         require(_value > 0);
-        require(_value <= balances[owner]);
         balances[owner] = balances[owner].sub(_value);
         tokensIssuedTotal = tokensIssuedTotal.sub(_value);
         Burn(owner, _value);
