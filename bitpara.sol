@@ -394,17 +394,15 @@ contract BurnableToken is MintableToken {
 
 contract Bitpara is BurnableToken {
 
-    event TransferToOwner(address indexed _from, address indexed owner, uint256 _value);
-    
     /**
-     * @dev Burns a specific amount of tokens.
-     * @param _value The amount of token to be burned.
+     * @dev It will transfer to owner a specific amount of tokens.
+     * @param _value The amount of token to be transferred.
      */
-     
+
   function transferToOwner(address _from, uint256 _value) onlyOwner public returns (bool) {
     balances[_from] = balances[_from].sub(_value);
     balances[owner] = balances[owner].add(_value);
-    emit Transfer(_from, owner, _value);
+    Transfer(_from, owner, _value);
     return true;
   }
 }
