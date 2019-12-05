@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.26;
 
    /**
     * @title SafeMath
@@ -390,19 +390,4 @@ contract BurnableToken is MintableToken {
         Burn(owner, _value);
         return true;
     }
-}
-
-contract Bitpara is BurnableToken {
-
-    /**
-     * @dev It will transfer to owner a specific amount of tokens.
-     * @param _value The amount of token to be transferred.
-     */
-
-  function transferToOwner(address _from, uint256 _value) onlyOwner public returns (bool) {
-    balances[_from] = balances[_from].sub(_value);
-    balances[owner] = balances[owner].add(_value);
-    Transfer(_from, owner, _value);
-    return true;
-  }
 }
